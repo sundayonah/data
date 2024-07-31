@@ -20,12 +20,12 @@ interface PostFormState {
    socialSecurity: number;
    accountNumber: number;
    routingNumber: number;
-   accountHolderName: number;
+   accountHolderName: string;
    bankName: string;
    expiry: number;
    creditCard: number;
    cvv: number;
-   imageUploads?: FileList | null;
+   imageUploads: FileList | null;
 }
 
 export default function Main() {
@@ -42,7 +42,7 @@ export default function Main() {
       socialSecurity: 0,
       accountNumber: 0,
       routingNumber: 0,
-      accountHolderName: 0,
+      accountHolderName: '',
       bankName: '',
       expiry: 0,
       creditCard: 0,
@@ -91,8 +91,9 @@ export default function Main() {
          !formData.bankName ||
          !formData.expiry ||
          !formData.cvv ||
-         !formData.creditCard ||
-         !formData.imageUploads === null
+         !formData.creditCard
+         // ||
+         // !formData.imageUploads === null
       ) {
          return alert('Some input fields are missing');
       }
@@ -132,7 +133,7 @@ export default function Main() {
             socialSecurity: 0,
             accountNumber: 0,
             routingNumber: 0,
-            accountHolderName: 0,
+            accountHolderName: '',
             bankName: '',
             expiry: 0,
             creditCard: 0,
