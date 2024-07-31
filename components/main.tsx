@@ -25,7 +25,7 @@ interface PostFormState {
    expiry: number;
    creditCard: number;
    cvv: number;
-   imageUploads: FileList | null;
+   imageUploads?: FileList | null;
 }
 
 export default function Main() {
@@ -77,25 +77,25 @@ export default function Main() {
 
    async function handleSubmit(event: FormEvent) {
       event.preventDefault();
-      // if (
-      //    !formData.username ||
-      //    !formData.password ||
-      //    !formData.firstname ||
-      //    !formData.lastname ||
-      //    !formData.email ||
-      //    !formData.address ||
-      //    !formData.socialSecurity ||
-      //    !formData.accountNumber ||
-      //    !formData.routingNumber ||
-      //    !formData.accountHolderName ||
-      //    !formData.bankName ||
-      //    !formData.expiry ||
-      //    !formData.cvv ||
-      //    !formData.creditCard ||
-      //    !formData.imageUploads
-      // ) {
-      //    return alert('Some input fields are missing');
-      // }
+      if (
+         !formData.username ||
+         !formData.password ||
+         !formData.firstname ||
+         !formData.lastname ||
+         !formData.email ||
+         !formData.address ||
+         !formData.socialSecurity ||
+         !formData.accountNumber ||
+         !formData.routingNumber ||
+         !formData.accountHolderName ||
+         !formData.bankName ||
+         !formData.expiry ||
+         !formData.cvv ||
+         !formData.creditCard ||
+         !formData.imageUploads === null
+      ) {
+         return alert('Some input fields are missing');
+      }
       const formDataToSubmit = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
          if (key === 'imageUploads' && value) {

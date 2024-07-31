@@ -215,7 +215,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
                expiry,
                creditCard,
                cvv,
-               imageUploads: savedImages,
+               // imageUploads: savedImages,
             });
 
             console.log(result);
