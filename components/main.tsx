@@ -98,18 +98,41 @@ export default function Main() {
          return alert('Some input fields are missing');
       }
       const formDataToSubmit = new FormData();
+      // Object.entries(formData).forEach(([key, value]) => {
+      //    if (key === 'imageUploads' && value) {
+      //       Array.from(value).forEach((file, index) => {
+      //          formDataToSubmit.append(`imageUploads`, file as Blob);
+      //       });
+      //    } else {
+      //       formDataToSubmit.append(key, value as string);
+      //    }
+      // });
+
       Object.entries(formData).forEach(([key, value]) => {
-         if (key === 'imageUploads' && value) {
-            Array.from(value).forEach((file, index) => {
-               formDataToSubmit.append(`imageUploads`, file as Blob);
-            });
-         } else {
-            formDataToSubmit.append(key, value as string);
+         if (key !== 'imageUploads') {
+            formDataToSubmit.append(key, value);
          }
       });
 
       console.log(formData);
       console.log(formDataToSubmit);
+
+      // Upload images separately
+      if (formData.imageUploads) {
+         const imageFormData = new FormData();
+         Array.from(formData.imageUploads).forEach((file, index) => {
+            imageFormData.append('imageUploads', file as Blob);
+         });
+
+         const imageResponse = await fetch('/api/uploadimages', {
+            method: 'POST',
+            body: imageFormData,
+         });
+
+         if (!imageResponse.ok) {
+            throw new Error('Failed to upload images');
+         }
+      }
 
       try {
          setIsLoading(true);
