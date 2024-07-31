@@ -25,12 +25,14 @@ interface PostFormState {
    expiry: number;
    creditCard: number;
    cvv: number;
-   imageUploads: FileList | null;
+   // imageUploads: FileList | null;
 }
 
 export default function Main() {
    const [isLoading, setIsLoading] = useState(false);
    const router = useRouter();
+
+   const [imageUploads, setImageUploads] = useState<FileList | null>(null);
 
    const [formData, setFormData] = useState<PostFormState>({
       username: '',
@@ -47,7 +49,7 @@ export default function Main() {
       expiry: 0,
       creditCard: 0,
       cvv: 0,
-      imageUploads: null,
+      // imageUploads: null,
    });
 
    const handleInputChange = (
@@ -62,14 +64,21 @@ export default function Main() {
       }));
    };
 
+   // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   //    const { files } = event.target;
+   //    console.log(files);
+   //    if (files && files.length > 0) {
+   //       setFormData((prevState) => ({
+   //          ...prevState,
+   //          imageUploads: files,
+   //       }));
+   //    }
+   // };
+
    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const { files } = event.target;
-      console.log(files);
       if (files && files.length > 0) {
-         setFormData((prevState) => ({
-            ...prevState,
-            imageUploads: files,
-         }));
+         setImageUploads(files);
       }
    };
 
@@ -98,29 +107,19 @@ export default function Main() {
          return alert('Some input fields are missing');
       }
       const formDataToSubmit = new FormData();
-      // Object.entries(formData).forEach(([key, value]) => {
-      //    if (key === 'imageUploads' && value) {
-      //       Array.from(value).forEach((file, index) => {
-      //          formDataToSubmit.append(`imageUploads`, file as Blob);
-      //       });
-      //    } else {
-      //       formDataToSubmit.append(key, value as string);
-      //    }
-      // });
 
       Object.entries(formData).forEach(([key, value]) => {
-         if (key !== 'imageUploads') {
-            formDataToSubmit.append(key, value);
-         }
+         formDataToSubmit.append(key, value as string);
       });
 
       console.log(formData);
       console.log(formDataToSubmit);
 
       // Upload images separately
-      if (formData.imageUploads) {
+      if (imageUploads) {
          const imageFormData = new FormData();
-         Array.from(formData.imageUploads).forEach((file, index) => {
+         Array.from(imageUploads).forEach((file, index) => {
+            console.log(index);
             imageFormData.append('imageUploads', file as Blob);
          });
 
@@ -161,9 +160,8 @@ export default function Main() {
             expiry: 0,
             creditCard: 0,
             cvv: 0,
-            imageUploads: null,
          });
-         alert('Form submitted successfully');
+         setImageUploads(null), alert('Form submitted successfully');
          router.push('/thank-you');
       } catch (error) {
          console.error('Error submitting form:', error);
