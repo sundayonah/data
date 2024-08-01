@@ -284,8 +284,6 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
                cvv,
             } = fields;
 
-    
-
             await client.connect();
             const db = client.db('data');
             const collection = db.collection('users');
@@ -306,7 +304,6 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
                creditCard,
                cvv,
             });
-
             res.status(200).send('Form data submitted successfully');
          }
       );

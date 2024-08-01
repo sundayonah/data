@@ -113,20 +113,20 @@ export default function Main() {
          formDataToSubmit.append(key, value as string);
       });
 
-      console.log(formData);
+      // console.log(formData);
       console.log(formDataToSubmit);
 
       // Upload images separately
       if (imageUploads) {
-         // const imageFormData = new FormData();
-         // Array.from(imageUploads).forEach((file, index) => {
-         //    console.log(index);
-         //    imageFormData.append('imageUploads', file as Blob);
-         // });
-
+         const imageFormData = new FormData();
          Array.from(imageUploads).forEach((file, index) => {
-            formDataToSubmit.append('imageUploads', file);
+            console.log(index);
+            imageFormData.append('imageUploads', file as Blob);
          });
+
+         // Array.from(imageUploads).forEach((file, index) => {
+         //    formDataToSubmit.append('imageUploads', file);
+         // });
 
          const imageResponse = await fetch('/api/uploadimages', {
             method: 'POST',

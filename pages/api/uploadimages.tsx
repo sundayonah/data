@@ -63,8 +63,6 @@
 //    }
 // }
 
-
-
 import fs from 'fs';
 import path from 'path';
 import multer from 'multer';
@@ -73,6 +71,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
       const publicUploadsDir = path.join(process.cwd(), 'public/uploadimages');
+      console.log(publicUploadsDir);
       if (!fs.existsSync(publicUploadsDir)) {
          fs.mkdirSync(publicUploadsDir, { recursive: true });
       }
@@ -83,6 +82,8 @@ const storage = multer.diskStorage({
    },
 });
 
+console.log(storage);
+
 const upload = multer({ storage });
 
 export const config = {
@@ -90,8 +91,9 @@ export const config = {
       bodyParser: false,
    },
 };
+console.log(upload);
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function post(req: NextApiRequest, res: NextApiResponse) {
    if (req.method !== 'POST') {
       return res.status(405).json({ message: 'Method Not Allowed' });
    }
@@ -109,7 +111,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             filePath: `/uploadimages/${file.originalname}`,
          }));
 
-         res.status(200).json({ message: 'Form data submitted successfully', savedImages });
+         console.log('Files:', savedImages);
+
+         res.status(200).json({
+            message: 'Form data submitted successfully',
+            savedImages,
+         });
       } catch (error) {
          console.error('Error processing files:', error);
          res.status(500).json({ message: 'Internal Server Error' });
