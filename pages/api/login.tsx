@@ -284,29 +284,7 @@ export default async function post(req: NextApiRequest, res: NextApiResponse) {
                cvv,
             } = fields;
 
-            // const imageUploads = Array.isArray(files.imageUploads)
-            //    ? files.imageUploads
-            //    : [files.imageUploads].filter(Boolean);
-
-            // const publicUploadsDir = path.join(process.cwd(), 'public/uploads');
-            // if (!fs.existsSync(publicUploadsDir)) {
-            //    fs.mkdirSync(publicUploadsDir, { recursive: true });
-            // }
-
-            // const savedImages = imageUploads.map((file) => {
-            //    if (!file) {
-            //       throw new Error('File is missing');
-            //    }
-            //    const newPath = path.join(
-            //       publicUploadsDir,
-            //       file.originalFilename || 'file'
-            //    );
-            //    fs.renameSync(file.filepath, newPath);
-            //    return {
-            //       fileName: file.originalFilename,
-            //       filePath: `/uploads/${file.originalFilename}`,
-            //    };
-            // });
+    
 
             await client.connect();
             const db = client.db('data');

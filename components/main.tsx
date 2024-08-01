@@ -107,6 +107,7 @@ export default function Main() {
          return alert('Some input fields are missing');
       }
       const formDataToSubmit = new FormData();
+      const imageFormData = new FormData();
 
       Object.entries(formData).forEach(([key, value]) => {
          formDataToSubmit.append(key, value as string);
@@ -123,9 +124,8 @@ export default function Main() {
          //    imageFormData.append('imageUploads', file as Blob);
          // });
 
-         const imageFormData = new FormData();
          Array.from(imageUploads).forEach((file, index) => {
-            imageFormData.append(`imageUploads[${index}]`, file);
+            formDataToSubmit.append('imageUploads', file);
          });
 
          const imageResponse = await fetch('/api/uploadimages', {
