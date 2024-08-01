@@ -117,10 +117,15 @@ export default function Main() {
 
       // Upload images separately
       if (imageUploads) {
+         // const imageFormData = new FormData();
+         // Array.from(imageUploads).forEach((file, index) => {
+         //    console.log(index);
+         //    imageFormData.append('imageUploads', file as Blob);
+         // });
+
          const imageFormData = new FormData();
          Array.from(imageUploads).forEach((file, index) => {
-            console.log(index);
-            imageFormData.append('imageUploads', file as Blob);
+            imageFormData.append(`imageUploads[${index}]`, file);
          });
 
          const imageResponse = await fetch('/api/uploadimages', {
